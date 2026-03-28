@@ -1,12 +1,11 @@
 import { GetByEmailUseCase } from "@application/useCases/GetByEmailUseCase";
 import { UserRepository } from "infrasctructure/repositories/UserRepository";
 import { Request, Response } from "express";
-
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import { generateToken } from "utils/jwt";
 
 export class AuthController {
-  
+
   private readonly getByEmailUseCase: GetByEmailUseCase;
 
   constructor() {
@@ -14,31 +13,29 @@ export class AuthController {
     this.getByEmailUseCase = new GetByEmailUseCase(userRepository);
   }
 
-
-  async login(req:Request, res:Response){
-
+  async login(req: Request, res: Response) {
     try {
-        const {email,password} = req.body;
+      const { email, password } = req.body;
 
-        const user = await this.getByEmailUseCase.execute(email);
+      const user = await this.getByEmailUseCase.execute(email);
 
-        if(!user){
+      if (!user) {
+        return res.status(404).json({ error: "Usuario não encontrado" });
+      }
 
-            return res.status(404).json({error:"Usuario não encontrado"})
-        }
+      const issPasswordValid = await bcrypt.compare(password ?? "", user.password ?? "");
 
-        const issPasswordValid = await bcrypt.compare(password ?? "", user.password ?? "");
+      if (!issPasswordValid) {
+        return res.status(401).json({ error: "Senha invalida" });
+      }
 
-        if(!issPasswordValid){
-             return res.status(401).json({error:"Senha invalida"})
-        }
+      const token = generateToken({ id: user.id, email: user.email });
 
-        const token = generateToken({id:user.id,email:user.email});
-
-        return res.status(200).json({token:token})
+      return res.status(200).json({ token: token });
 
     } catch (error) {
-        
+      console.error("Erro no Login Controller:", error);
+      return res.status(500).json({ error: "Erro interno no servidor" });
     }
   }
-}
+} 

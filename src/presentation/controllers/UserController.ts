@@ -31,8 +31,8 @@ export class UserController{
 
     async createUser(req: Request, res: Response) {
         try {
-            const { name, email } = req.body;
-            const user = await this.createUserUseCase.execute(name,name, email);
+            const { name, email, password } = req.body;
+            const user = await this.createUserUseCase.execute(name, email, password);
             
             return res.status(201).json(user);
         } catch (error) {

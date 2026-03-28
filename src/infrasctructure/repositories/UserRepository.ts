@@ -31,7 +31,7 @@ export class UserRepository implements IUserRepository {
         try {
             const [result]: any = await this.pool.execute(
                 "INSERT into users (name, email, password) VALUES (?, ?, ?)", 
-                [user.name, user.email]
+                [user.name, user.email, user.password] 
             );
 
             user.id = result.insertId;

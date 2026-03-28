@@ -25,6 +25,6 @@ export class UserDTO {
         this.id = _id
         this.name = _name;
         this.email = _email;
-        this.password = this.password;
+        this.password = _password;
     }
 }

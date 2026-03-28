@@ -12,7 +12,7 @@ export class GetByEmailUseCase{
         const user: User | null = await this.userRepository.findByEmail(email);
         if(!user) return null
         return new UserDTO(
-           user?.name, user?.email,user?.password
+           user?.name, user?.email,user?.password, user?.id
         );
     }
 }
