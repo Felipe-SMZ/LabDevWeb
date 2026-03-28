@@ -30,7 +30,7 @@ export class UserRepository implements IUserRepository {
         */
         try {
             const [result]: any = await this.pool.execute(
-                "INSERT into users (name, email) VALUES (?, ?)", 
+                "INSERT into users (name, email, password) VALUES (?, ?, ?)", 
                 [user.name, user.email]
             );
 

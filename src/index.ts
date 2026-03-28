@@ -12,8 +12,11 @@ async function startApp() {
     app.use(express.json());
 
     const userRoutes = await import("@presentation/routes/userRoutes");
+    const authRouters = await import("@presentation/routes/authRoutes");
+
     app.use("/api", userRoutes.default);
 
+    app.use("/auth",authRouters.default)
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => console.log(`Application is running on port ${PORT}`));
 }

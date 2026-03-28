@@ -7,3 +7,6 @@ create table users(
     name varchar(70) not null,
     email varchar(100) unique not null
 );
+
+ALTER table users ADD COLUMN password varchar(80) not null;
+
